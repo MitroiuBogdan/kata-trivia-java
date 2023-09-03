@@ -5,7 +5,7 @@ import java.util.List;
 
 // REFACTOR ME
 public class GameBetter implements IGame {
-    ArrayList players = new ArrayList();
+
     List<Player> playerBase;
 
     private final QuestionDeck questionDeck;
@@ -26,43 +26,44 @@ public class GameBetter implements IGame {
         playerBase.add(new Player(playerName));
 
         System.out.println(playerName + " was added");
-        System.out.println("They are player number " + players.size());
+        System.out.println("They are player number " + playerBase.size());
         return true;
     }
 
     public int howManyPlayers() {
-        return players.size();
+        return playerBase.size();
     }
 
     public void roll(int roll) {
         Player currentPlayer = playerBase.get(turn);
 
-        System.out.println(currentPlayer + " is the current player");
+        System.out.println(currentPlayer.getPlayerName() + " is the current player");
         System.out.println("They have rolled a " + roll);
 
         if (currentPlayer.isInPenaltyBox()) {
             if (roll % 2 != 0) {
-//                currentPlayer.setInPenaltyBox(false);
                 isGettingOutOfPenaltyBox = true;
-                System.out.println(currentPlayer + " is getting out of the penalty box");
+                System.out.println(currentPlayer.getPlayerName() + " is getting out of the penalty box");
 
                 currentPlayer.updatePlace(roll);
 
-                System.out.println(currentPlayer);
+                System.out.println(currentPlayer.getPlayerName()
+                        + "'s new location is "
+                        + currentPlayer.getPlace());
                 System.out.println("The category is " + getCategoryByPlace(currentPlayer.getPlace()));
                 askQuestion(currentPlayer);
             } else {
-                System.out.println(currentPlayer + " is not getting out of the penalty box");
-//                currentPlayer.setInPenaltyBox(true);
+                System.out.println(currentPlayer.getPlayerName() + " is not getting out of the penalty box");
                 isGettingOutOfPenaltyBox = false;
 
             }
 
         } else {
 
-            currentPlayer.updatePlace(turn);
-            System.out.println(currentPlayer);
-
+            currentPlayer.updatePlace(roll);
+            System.out.println(currentPlayer.getPlayerName()
+                    + "'s new location is "
+                    + currentPlayer.getPlace());
             System.out.println("The category is " + getCategoryByPlace(currentPlayer.getPlace()));
             askQuestion(currentPlayer);
         }
@@ -92,8 +93,10 @@ public class GameBetter implements IGame {
             if (isGettingOutOfPenaltyBox) {
                 System.out.println("Answer was correct!!!!");
                 currentPlayer.incrementPurse();
-                System.out.println(currentPlayer);
-
+                System.out.println(currentPlayer.getPlayerName()
+                        + " now has "
+                        + currentPlayer.getPurse()
+                        + " Gold Coins.");
                 boolean winner = didPlayerWin(currentPlayer);
                 updateTurn();
                 return winner;
@@ -103,9 +106,12 @@ public class GameBetter implements IGame {
             }
 
         } else {
-            System.out.println("Answer was current!!!!");
+            System.out.println("Answer was corrent!!!!");
             currentPlayer.incrementPurse();
-            System.out.println(currentPlayer);
+            System.out.println(currentPlayer.getPlayerName()
+                    + " now has "
+                    + currentPlayer.getPurse()
+                    + " Gold Coins.");
 
             boolean winner = didPlayerWin(currentPlayer);
             updateTurn();
@@ -114,10 +120,10 @@ public class GameBetter implements IGame {
     }
 
     public boolean wrongAnswer() {
+        Player currentPlayer = playerBase.get(turn);
         System.out.println("Question was incorrectly answered");
-        Player currentPlayer=playerBase.get(turn);
-        System.out.println(currentPlayer + " was sent to the penalty box");
-
+        System.out.println(currentPlayer.getPlayerName() + " was sent to the penalty box");
+        currentPlayer.setInPenaltyBox(true);
         updateTurn();
         return true;
     }
@@ -129,6 +135,6 @@ public class GameBetter implements IGame {
 
     private void updateTurn() {
         turn++;
-        if (turn == players.size()) turn = 0;
+        if (turn == playerBase.size()) turn = 0;
     }
 }
