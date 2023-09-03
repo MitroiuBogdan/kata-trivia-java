@@ -33,20 +33,16 @@ public class GameBetter implements IGame {
         System.out.println("They have rolled a " + roll);
 
         if (currentPlayer.isInPenaltyBox()) {
-            if (shouldReleasePlayer(roll)) {
-                currentPlayer.setGettingOutOfPenaltyBox(true);
-                System.out.println(currentPlayer.getPlayerName() + " is getting out of the penalty box");
+            boolean shouldRelease = roll % 2 != 0;
+            currentPlayer.setGettingOutOfPenaltyBox(shouldRelease);
+            System.out.println(currentPlayer.getPlayerName() + (shouldRelease ? " is getting out of the penalty box" : " is not getting out of the penalty box"));
+
+            if (shouldRelease) {
                 executePlayerTurn(roll, currentPlayer);
-            } else {
-                System.out.println(currentPlayer.getPlayerName() + " is not getting out of the penalty box");
-                currentPlayer.setGettingOutOfPenaltyBox(false);
-
             }
-
         } else {
             executePlayerTurn(roll, currentPlayer);
         }
-
     }
 
     private void executePlayerTurn(int roll, Player player) {
@@ -90,10 +86,6 @@ public class GameBetter implements IGame {
     private void updateGameTurn() {
         turn++;
         if (turn == playerBase.size()) turn = 0;
-    }
-
-    private boolean shouldReleasePlayer(int roll) {
-        return roll % 2 != 0;
     }
 
     private boolean notInPenaltyBoxOrIsGettingOutOfPenaltyBox(Player player) {
