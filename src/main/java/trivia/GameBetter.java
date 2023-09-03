@@ -7,9 +7,6 @@ import java.util.List;
 public class GameBetter implements IGame {
     ArrayList players = new ArrayList();
     List<Player> playerBase;
-    int[] places = new int[6];
-    int[] purses = new int[6];
-    boolean[] inPenaltyBox = new boolean[6];
 
     private final QuestionDeck questionDeck;
 
@@ -27,11 +24,6 @@ public class GameBetter implements IGame {
 
     public boolean add(String playerName) {
         playerBase.add(new Player(playerName));
-        players.add(playerName);
-        places[howManyPlayers()] = 0;
-        purses[howManyPlayers()] = 0;
-        inPenaltyBox[howManyPlayers()] = false;
-
 
         System.out.println(playerName + " was added");
         System.out.println("They are player number " + players.size());
@@ -56,9 +48,7 @@ public class GameBetter implements IGame {
 
                 currentPlayer.updatePlace(roll);
 
-                System.out.println(players.get(turn)
-                        + "'s new location is "
-                        + places[turn]);
+                System.out.println(currentPlayer);
                 System.out.println("The category is " + getCategoryByPlace(currentPlayer.getPlace()));
                 askQuestion(currentPlayer);
             } else {
@@ -71,9 +61,7 @@ public class GameBetter implements IGame {
         } else {
 
             currentPlayer.updatePlace(turn);
-            System.out.println(players.get(turn)
-                    + "'s new location is "
-                    + places[turn]);
+            System.out.println(currentPlayer);
 
             System.out.println("The category is " + getCategoryByPlace(currentPlayer.getPlace()));
             askQuestion(currentPlayer);
@@ -127,8 +115,8 @@ public class GameBetter implements IGame {
 
     public boolean wrongAnswer() {
         System.out.println("Question was incorrectly answered");
-        System.out.println(players.get(turn) + " was sent to the penalty box");
-        inPenaltyBox[turn] = true;
+        Player currentPlayer=playerBase.get(turn);
+        System.out.println(currentPlayer + " was sent to the penalty box");
 
         updateTurn();
         return true;
