@@ -1,6 +1,5 @@
 package trivia;
 
-import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.stream.IntStream;
 
