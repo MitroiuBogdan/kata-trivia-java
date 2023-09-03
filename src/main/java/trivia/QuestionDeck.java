@@ -1,7 +1,8 @@
 package trivia;
 
+import java.io.InputStream;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.stream.IntStream;
 
 public class QuestionDeck {
 
@@ -15,45 +16,40 @@ public class QuestionDeck {
     private final LinkedList<String> sportsQuestions;
     private final LinkedList<String> rockQuestions;
 
-    public QuestionDeck() {
+    public QuestionDeck(int size) {
         popQuestions = new LinkedList<>();
         scienceQuestions = new LinkedList<>();
         sportsQuestions = new LinkedList<>();
         rockQuestions = new LinkedList<>();
-        loadQuestions();
+        loadQuestions(size);
     }
 
-    public void loadQuestions() {
-        for (int i = 0; i < 50; i++) {
+    public void loadQuestions(int size) {
+        IntStream.range(0, size).forEach(i -> {
             popQuestions.addLast(POP_QUESTION_TEMPLATE + i);
             scienceQuestions.addLast((SCIENCE_QUESTION_TEMPLATE + i));
             sportsQuestions.addLast((SPORTS_QUESTION_TEMPLATE + i));
             rockQuestions.addLast(ROCK_QUESTION_TEMPLATE + i);
-        }
+        });
     }
 
-    public LinkedList<String> getPopQuestions() {
-        return popQuestions;
-    }
-
-    public LinkedList<String> getScienceQuestions() {
-        return scienceQuestions;
-    }
-
-    public LinkedList<String> getSportsQuestions() {
-        return sportsQuestions;
-    }
-
-    public LinkedList<String> getRockQuestions() {
-        return rockQuestions;
-    }
-
-    public String pickQuestionByCategory(Category category) {
+    public String pickQuestionByPlace(int place) {
+        Category category = getPlaceCategory(place);
+        System.out.println("The category is " + category.name());
         return switch (category) {
             case Rock -> rockQuestions.removeFirst();
             case Science -> scienceQuestions.removeFirst();
             case Pop -> popQuestions.removeFirst();
             case Sports -> sportsQuestions.removeFirst();
+        };
+    }
+
+    public Category getPlaceCategory(int place) {
+        return switch (place) {
+            case 0, 4, 8 -> Category.Pop;
+            case 1, 5, 9 -> Category.Science;
+            case 2, 6, 10 -> Category.Sports;
+            default -> Category.Rock;
         };
     }
 }

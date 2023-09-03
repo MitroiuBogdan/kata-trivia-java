@@ -60,7 +60,7 @@ public class Player {
     }
 
 
-    public void updatePlaceOnBoard(int roll) {
+    public void updatePositionOnBoard(int roll) {
         this.place = this.place + roll;
         if (this.place > 11) {
             this.place = this.place - 12;

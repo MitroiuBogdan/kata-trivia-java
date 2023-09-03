@@ -6,16 +6,17 @@ import java.util.List;
 // REFACTOR ME
 public class GameBetter implements IGame {
 
+
+    private final static int QUESTION_DECK_SIZE = 52;
     private final List<Player> playerBase;
     private final QuestionDeck questionDeck;
     private int turn;
-
     private Player currentPlayer;
 
     public GameBetter() {
         this.turn = 0;
         playerBase = new ArrayList<>();
-        questionDeck = new QuestionDeck();
+        questionDeck = new QuestionDeck(QUESTION_DECK_SIZE);
     }
 
     public boolean add(String playerName) {
@@ -35,7 +36,7 @@ public class GameBetter implements IGame {
             if (shouldReleasePlayer(roll)) {
                 currentPlayer.setGettingOutOfPenaltyBox(true);
                 System.out.println(currentPlayer.getPlayerName() + " is getting out of the penalty box");
-                executeAPlayerTurn(roll, currentPlayer);
+                executePlayerTurn(roll, currentPlayer);
             } else {
                 System.out.println(currentPlayer.getPlayerName() + " is not getting out of the penalty box");
                 currentPlayer.setGettingOutOfPenaltyBox(false);
@@ -43,47 +44,29 @@ public class GameBetter implements IGame {
             }
 
         } else {
-            executeAPlayerTurn(roll, currentPlayer);
+            executePlayerTurn(roll, currentPlayer);
         }
 
     }
 
-    private void executeAPlayerTurn(int roll, Player player) {
-        player.updatePlaceOnBoard(roll);
-        System.out.println(player.getPlayerName()
-                + "'s new location is "
-                + player.getPlace());
-        System.out.println("The category is " + getPlaceCategory(player.getPlace()));
-        askQuestion(player);
-    }
-
-    private void askQuestion(Player player) {
-        Category category = getPlaceCategory(player.getPlace());
-        String question = questionDeck.pickQuestionByCategory(category);
+    private void executePlayerTurn(int roll, Player player) {
+        player.updatePositionOnBoard(roll);
+        System.out.println(player.getPlayerName() + "'s new location is " + player.getPlace());
+        String question = questionDeck.pickQuestionByPlace(player.getPlace());
         System.out.println(question);
     }
 
 
-    private Category getPlaceCategory(int place) {
-        return switch (place) {
-            case 0, 4, 8 -> Category.Pop;
-            case 1, 5, 9 -> Category.Science;
-            case 2, 6, 10 -> Category.Sports;
-            default -> Category.Rock;
-        };
-    }
-
     public boolean wasCorrectlyAnswered() {
-        this.currentPlayer = playerBase.get(turn);
+        if (currentPlayer == null) {
+            currentPlayer = playerBase.get(turn);
+        }
         boolean hasCurrentPlayerWon = true;
 
-        if (isGettingOutOfPenaltyBoxIfInPenaltyBox(currentPlayer)) {
+        if (notInPenaltyBoxOrIsGettingOutOfPenaltyBox(currentPlayer)) {
             System.out.println("Answer was correct!!!!");
             currentPlayer.incrementPurseAmount();
-            System.out.println(currentPlayer.getPlayerName()
-                    + " now has "
-                    + currentPlayer.getPurse()
-                    + " Gold Coins.");
+            System.out.println(currentPlayer.getPlayerName() + " now has " + currentPlayer.getPurse() + " Gold Coins.");
             hasCurrentPlayerWon = currentPlayer.hasWon();
         }
 
@@ -92,7 +75,10 @@ public class GameBetter implements IGame {
     }
 
     public boolean wrongAnswer() {
-        this.currentPlayer = playerBase.get(turn);
+        if (currentPlayer == null) {
+            currentPlayer = playerBase.get(turn);
+        }
+
         System.out.println("Question was incorrectly answered");
         System.out.println(currentPlayer.getPlayerName() + " was sent to the penalty box");
         currentPlayer.setInPenaltyBox(true);
@@ -110,7 +96,7 @@ public class GameBetter implements IGame {
         return roll % 2 != 0;
     }
 
-    private boolean isGettingOutOfPenaltyBoxIfInPenaltyBox(Player player) {
+    private boolean notInPenaltyBoxOrIsGettingOutOfPenaltyBox(Player player) {
         return !player.isInPenaltyBox() || player.isGettingOutOfPenaltyBox();
     }
 }
