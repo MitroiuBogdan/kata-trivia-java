@@ -5,13 +5,17 @@ public class Player {
     private int place;
     private int purse;
     private boolean inPenaltyBox;
-    private String playerName;
+
+    private boolean gettingOutOfPenaltyBox;
+
+    private final String playerName;
 
 
     public Player(String playerName) {
         this.place = 0;
         this.purse = 0;
         this.inPenaltyBox = false;
+        this.gettingOutOfPenaltyBox = false;
         this.playerName = playerName;
     }
 
@@ -21,6 +25,14 @@ public class Player {
 
     public int getPurse() {
         return purse;
+    }
+
+    public boolean isGettingOutOfPenaltyBox() {
+        return gettingOutOfPenaltyBox;
+    }
+
+    public void setGettingOutOfPenaltyBox(boolean gettingOutOfPenaltyBox) {
+        this.gettingOutOfPenaltyBox = gettingOutOfPenaltyBox;
     }
 
     public boolean isInPenaltyBox() {
@@ -41,30 +53,24 @@ public class Player {
                 '}';
     }
 
-    public void setPlace(int place) {
-        this.place = place;
-    }
-
-    public void setPurse(int purse) {
-        this.purse = purse;
-    }
 
     public void setInPenaltyBox(boolean inPenaltyBox) {
         this.inPenaltyBox = inPenaltyBox;
     }
 
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
-    }
 
-    public void updatePlace(int roll) {
+    public void updatePlaceOnBoard(int roll) {
         this.place = this.place + roll;
         if (this.place > 11) {
             this.place = this.place - 12;
         }
     }
 
-    public void incrementPurse() {
+    public void incrementPurseAmount() {
         purse = purse + 1;
+    }
+
+    public boolean hasWon() {
+        return !(this.getPurse() == 6);
     }
 }
