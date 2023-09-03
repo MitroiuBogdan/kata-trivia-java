@@ -80,28 +80,23 @@ public class GameBetter implements IGame {
     public boolean wasCorrectlyAnswered() {
         this.currentPlayer = playerBase.get(turn);
         boolean hasCurrentPlayerWon = true;
-        if (currentPlayer.isInPenaltyBox()) {
-            if (currentPlayer.isGettingOutOfPenaltyBox()) {
-                System.out.println("Answer was correct!!!!");
-                currentPlayer.incrementPurseAmount();
-                System.out.println(currentPlayer.getPlayerName()
-                        + " now has "
-                        + currentPlayer.getPurse()
-                        + " Gold Coins.");
-                hasCurrentPlayerWon = currentPlayer.hasWon();
-            }
-        } else {
-            System.out.println("Answer was corrent!!!!");
-            currentPlayer.incrementPurseAmount();
-            System.out.println(currentPlayer.getPlayerName()
-                    + " now has "
-                    + currentPlayer.getPurse()
-                    + " Gold Coins.");
 
+        if (!currentPlayer.isInPenaltyBox() || currentPlayer.isGettingOutOfPenaltyBox()) {
+            updateGameOnCorrectAnswer(currentPlayer);
             hasCurrentPlayerWon = currentPlayer.hasWon();
         }
+
         updateGameTurn();
         return hasCurrentPlayerWon;
+    }
+
+    private void updateGameOnCorrectAnswer(Player currentPlayer) {
+        System.out.println("Answer was correct!!!!");
+        currentPlayer.incrementPurseAmount();
+        System.out.println(currentPlayer.getPlayerName()
+                + " now has "
+                + currentPlayer.getPurse()
+                + " Gold Coins.");
     }
 
     public boolean wrongAnswer() {
