@@ -35,14 +35,7 @@ public class GameBetter implements IGame {
             if (shouldReleasePlayer(roll)) {
                 currentPlayer.setGettingOutOfPenaltyBox(true);
                 System.out.println(currentPlayer.getPlayerName() + " is getting out of the penalty box");
-
-                currentPlayer.updatePlaceOnBoard(roll);
-
-                System.out.println(currentPlayer.getPlayerName()
-                        + "'s new location is "
-                        + currentPlayer.getPlace());
-                System.out.println("The category is " + getPlaceCategory(currentPlayer.getPlace()));
-                askQuestion(currentPlayer);
+                executeAPlayerTurn(roll, currentPlayer);
             } else {
                 System.out.println(currentPlayer.getPlayerName() + " is not getting out of the penalty box");
                 currentPlayer.setGettingOutOfPenaltyBox(false);
@@ -50,15 +43,18 @@ public class GameBetter implements IGame {
             }
 
         } else {
-
-            currentPlayer.updatePlaceOnBoard(roll);
-            System.out.println(currentPlayer.getPlayerName()
-                    + "'s new location is "
-                    + currentPlayer.getPlace());
-            System.out.println("The category is " + getPlaceCategory(currentPlayer.getPlace()));
-            askQuestion(currentPlayer);
+            executeAPlayerTurn(roll, currentPlayer);
         }
 
+    }
+
+    private void executeAPlayerTurn(int roll, Player player) {
+        player.updatePlaceOnBoard(roll);
+        System.out.println(player.getPlayerName()
+                + "'s new location is "
+                + player.getPlace());
+        System.out.println("The category is " + getPlaceCategory(player.getPlace()));
+        askQuestion(player);
     }
 
     private void askQuestion(Player player) {
