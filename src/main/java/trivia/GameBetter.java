@@ -59,7 +59,7 @@ public class GameBetter implements IGame {
         }
         boolean hasCurrentPlayerWon = true;
 
-        if (notInPenaltyBoxOrIsGettingOutOfPenaltyBox(currentPlayer)) {
+        if (!currentPlayer.isInPenaltyBox() || currentPlayer.isGettingOutOfPenaltyBox()) {
             System.out.println("Answer was correct!!!!");
             currentPlayer.incrementPurseAmount();
             System.out.println(currentPlayer.getPlayerName() + " now has " + currentPlayer.getPurse() + " Gold Coins.");
@@ -88,7 +88,4 @@ public class GameBetter implements IGame {
         if (turn == playerBase.size()) turn = 0;
     }
 
-    private boolean notInPenaltyBoxOrIsGettingOutOfPenaltyBox(Player player) {
-        return !player.isInPenaltyBox() || player.isGettingOutOfPenaltyBox();
-    }
 }
