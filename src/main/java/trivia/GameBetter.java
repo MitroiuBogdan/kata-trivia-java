@@ -57,6 +57,8 @@ public class GameBetter implements IGame {
         if (currentPlayer == null) {
             currentPlayer = playerBase.get(turn);
         }
+
+        //the return values should be reversed -> i will keep like this to not modify PLayGame.class
         boolean hasCurrentPlayerWon = true;
 
         if (!currentPlayer.isInPenaltyBox() || currentPlayer.isGettingOutOfPenaltyBox()) {
